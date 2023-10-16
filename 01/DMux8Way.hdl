@@ -17,4 +17,11 @@ CHIP DMux8Way {
 
     PARTS:
     // Put your code here:
+	DMux4Way(in=in, sel=sel[0..1], a=ra, b=rb, c=rc, d=rd); //dividing possible results in two (this one where sel[2] = 0)
+	DMux4Way(in=in, sel=sel[0..1], a=re, b=rf, c=rg, d=rh);	/dividing possible results in two (this one where sel[2] = 1)
+	DMux(in=ra, sel=sel[2], a=a, b=e); //if sel[2] = 0 retrieve correct input from ra and store in a, and set e = 0 - otherwise opposite
+	DMux(in=rb, sel=sel[2], a=b, b=f);
+	DMux(in=rc, sel=sel[2], a=c, b=g);
+	DMux(in=rd, sel=sel[2], a=d, b=h);
+	
 }

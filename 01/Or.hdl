@@ -15,4 +15,8 @@ CHIP Or {
 
     PARTS:
     // Put your code here:
+	Not(in=a, out=Nota);
+	Not(in=b, out=Notb); //turning into not, for double negative use in DeMorgan
+	Nand(a=Nota, b=Notb, out=out); //DeMorgan turns into nota or notb
+	
 }

@@ -17,4 +17,10 @@ CHIP DMux4Way {
 
     PARTS:
     // Put your code here:
+	DMux(in=in, sel=sel[0], a=resulta, b=resultb); //checking where to put in, either in a or b
+	DMux(in=in, sel=sel[0], a=resultc, b=resultd);
+	DMux(in=resulta, sel=sel[1], a=a, b=c); //checking sel to see if resulta was correct or if needed to be stored in other (c)
+	DMux(in=resultd, sel=sel[1], a=b, b=d);
+
+
 }

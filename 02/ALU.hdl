@@ -53,6 +53,13 @@ CHIP ALU {
 	And16(a=nxResult, b=nyResult, out=fFalseResult);
 	Mux16(a=fFalseResult, b=fTrueResult, sel=f, out=fResult);
 	Not16(in=fResult, out=NotfResult);
-	Mux16(a=fResult, b=NotfResult, sel=no, out=out, out=noResult);
-   
+
+	Mux16(a=fResult, b=NotfResult, sel=no, out[15]=ng, out=out, out[0..7]=NoResult1, out[8..15]=NoResult2);
+
+	Or8Way(in=NoResult1, out=Half0Result1);
+	Or8Way(in=NoResult2, out=Half0Result2);
+	Or(a=Half0Result1, b=Half0Result2, out=zrTemp);
+	Mux(a=true, b=false, sel=zrTemp, out=zr);
+	
+	
 }

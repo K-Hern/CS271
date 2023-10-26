@@ -18,8 +18,7 @@
 char *strip(char *s){	
 
 	// your code here
-   // int len = (strlen(s) + 1);
-    char s_new[MAX_LINE_LENGTH] = {0};
+    char s_new[strlen(s)+ 1];
     int i = 0;
 
     for (char *s2 = s; *s2; s2++){
@@ -61,7 +60,8 @@ void parse(FILE * file){
         
         
 
+    
     }
 
-    fclose(file);
+
 }

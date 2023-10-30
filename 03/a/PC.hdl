@@ -17,4 +17,21 @@ CHIP PC {
 
     PARTS:
     // Put your code here:
+
+		
+
+	Inc16(in=pastIn, out=Inked16); //Preforming Increment to potentially be used later
+	Mux16(a=pastIn, b=Inked16, sel=inc, out=InkedOut); //Pass previous result if inc false, or Incremented result if true
+
+	Mux16(a=InkedOut, b=in, sel=load, out=LoadOut); // Pass Incremented result if load false, or in if true
+	Mux16(a=LoadOut, b=false, sel=reset, out=ResetOut); // Pass Load result if reset false, or reset if true
+	
+
+	Register(in=ResetOut, load=true, out=pastIn, out=out); // Always saving result, but outputting 2 - one for future chip use and out
+
+
+	
+	
+
+	
 }

@@ -28,4 +28,24 @@ CHIP Memory {
 
     PARTS:
     // Put your code here:
+
+	DMux4Way(in=load, sel=address[13..14], a=RamLoada, b=RamLoadb, c=ScreenLoad, d=Void); //Organizing Load bit values
+	Or(a=RamLoada, b=RamLoadb, out=RamLoad);	// Passing through value for screen since 2 acceptable answers
+
+
+	RAM16K(in=in, load=RamLoad, address=address[0..13], out=RamOut); //0 - 0011 1111 1111 1111
+
+	ALU(x[15]=false, x[0..14]=address, y[0..13]=true, y[14..15]=false, zx=false, nx=true, zy=false, ny=false, f=true, no=true, out[0..12]=ScreenAddress, zr=void, ng=voided);
+
+	Screen(in=in, load=ScreenLoad, address=ScreenAddress, out=ScreenOut); //0100 0000 0000 0000 - 0101 1111 1111 1111
+	Keyboard(out=KeyOut); //0110 0000 0000 00000
+
+
+	Mux4Way16(a=RamOut, b=RamOut, c=ScreenOut, d=KeyOut, sel=address[13..14], out=out);
+	
+
+
+
+
+
 }

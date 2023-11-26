@@ -40,4 +40,74 @@ CHIP CPU {
 
     PARTS:
     // Put your code here:
+
+	
+
+//Checking to see if instruction is A or C instruction
+	Mux16(a=instruction, b=ALUout, sel=instruction[15], out=InitialMuxOut);
+//Setting ARegister Load bit to 1 if instruction is A
+    Not(in=instruction[15], out=AInstructLoad);
+//Checking to see if both a C instruction and if A reg is a destination
+    And(a=instruction[15], b=instruction[5], out=CompARegDest);
+//Setting ARegister Load bit to 1 if either is a dest or if A instruction
+    Or(a=AInstructLoad, b=CompARegDest, out=ARegLoad);
+
+
+//Loading ARegister with instruction
+    ARegister(in=instruction, load=ARegLoad, out=ARegOut, out[15]=Void, out[0..14]=addressM);
+
+//y of ALU is either inM if a bit is 1 or d if not
+	Mux16(a=ARegOut, b=inM, sel=instruction[12], out=SecondaryMuxOut);
+    ALU(x=DRegOut, y=SecondaryMuxOut, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=ALUout, out=outM, zr=ALUZero, ng=ALUNeg);
+//Checking to make sure D is a destination and that Instruction is of type C
+    And(a=instruction[15], b=instruction[4], out=DRegLoad);
+    DRegister(in=ALUout, load=DRegLoad, out=DRegOut);
+
+//Checking to make sure M is a destination and that Instruction is of type C
+    Mux(a=false, b=instruction[3], sel=instruction[15], out=writeM);
+
+
+
+    
+
+
+
+	DMux8Way(in=instruction[15], sel=instruction[0..2], a=Null, b=JGT, c=JEQ, d=JGE, e=JLT, f=JNE, g=JLE, h=JMP);
+
+    
+
+//Checking to see if either an A instruction or NULL jump in which case increment by 1
+    Or(a=AInstructLoad, b=Null, out=PCInc);
+
+//JGT
+    Or(a=ALUZero, b=ALUNeg, out=ALUZeroOrNeg);
+    Not(in=ALUZeroOrNeg, out=ALUGreaterThanZero);
+    And(a=ALUGreaterThanZero, b=JGT, out=JGTOut);
+
+//JEQ
+    And(a=ALUZero, b=JEQ, out=JEQOut);
+
+//JGE
+    Or(a=ALUGreaterThanZero, b=ALUZero, out=ALUGreaterThanOrEqualZero);
+    And(a=ALUGreaterThanOrEqualZero, b=JGE, out=JGEOut);
+
+//JLT
+    And(a=ALUNeg, b=JLT, out=JLTOut);
+
+//JNE
+    Not(in=ALUZero, out=ALUNotZero);
+    And(a=ALUNotZero, b=JNE, out=JNEOut);
+
+//JLE
+    Or(a=ALUNeg, b=ALUZero, out=ALULessThanOrEqualZero);
+    And(a=ALULessThanOrEqualZero, b=JLE, out=JLEOut);
+
+
+    Or8Way(in[0]=false, in[1]=JGTOut, in[2]=JEQOut, in[3]=JGEOut, in[4]=JLTOut, in[5]=JNEOut, in[6]=JLEOut, in[7]=JMP, out=PCLoad);
+
+    
+
+    PC(in=ARegOut, load=PCLoad, inc=PCInc, reset=reset, out[15]=void, out[0..14]=pc);
+
+
 }

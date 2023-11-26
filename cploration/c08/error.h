@@ -9,9 +9,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-
-
-
 typedef enum exitcode{
     /*
     * Error code 1 represents that given file does not exist.

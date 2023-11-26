@@ -9,9 +9,6 @@
 #ifndef __PARSER_H__
 #define __PARSER_H__
 
-// All code in file
-
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

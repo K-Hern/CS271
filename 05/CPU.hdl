@@ -48,36 +48,37 @@ CHIP CPU {
 //Setting ARegister Load bit to 1 if instruction is A
     Not(in=instruction[15], out=AInstructLoad);
 //Checking to see if both a C instruction and if A reg is a destination
-    And(a=instruction[15], b=instruction[5], out=CompARegDest);
+    And(a=instruction[15], b=instruction[5], out=CtypeARegDest);
 //Setting ARegister Load bit to 1 if either is a dest or if A instruction
-    Or(a=AInstructLoad, b=CompARegDest, out=ARegLoad);
+    Or(a=AInstructLoad, b=CtypeARegDest, out=ARegLoad);
 
 
 //Loading ARegister with instruction
-    ARegister(in=instruction, load=ARegLoad, out=ARegOut, out[15]=Void, out[0..14]=addressM);
+    ARegister(in=InitialMuxOut, load=ARegLoad, out=ARegOut, out[15]=MVoidBitF, out[0..14]=addressM);
+
+
 
 //y of ALU is either inM if a bit is 1 or d if not
 	Mux16(a=ARegOut, b=inM, sel=instruction[12], out=SecondaryMuxOut);
     ALU(x=DRegOut, y=SecondaryMuxOut, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=ALUout, out=outM, zr=ALUZero, ng=ALUNeg);
+
 //Checking to make sure D is a destination and that Instruction is of type C
     And(a=instruction[15], b=instruction[4], out=DRegLoad);
     DRegister(in=ALUout, load=DRegLoad, out=DRegOut);
 
 //Checking to make sure M is a destination and that Instruction is of type C
-    Mux(a=false, b=instruction[3], sel=instruction[15], out=writeM);
+    Mux(a=false, b=instruction[3], sel=instruction[15], out=writeM, out=writeMBit);
+
+//Storing address in addressM if we are writing to M, else submitting nothing 
+ //   Mux16(a=false, b=addressMOut, sel=writeMBit, out[15]=MVoidBit, out[0..14]=addressM);
 
 
+//Cheking to see which jump condition has been selected, and filling that selection with the MSB (1 if C instruction, othwerise all return false)
+    DMux8Way(in=instruction[15], sel=instruction[0..2], a=Null, b=JGT, c=JEQ, d=JGE, e=JLT, f=JNE, g=JLE, h=JMP);
 
     
-
-
-
-	DMux8Way(in=instruction[15], sel=instruction[0..2], a=Null, b=JGT, c=JEQ, d=JGE, e=JLT, f=JNE, g=JLE, h=JMP);
-
-    
-
 //Checking to see if either an A instruction or NULL jump in which case increment by 1
-    Or(a=AInstructLoad, b=Null, out=PCInc);
+    Or(a=AInstructLoad, b=Null, out=AtypeOrNULLInc);
 
 //JGT
     Or(a=ALUZero, b=ALUNeg, out=ALUZeroOrNeg);
@@ -102,8 +103,13 @@ CHIP CPU {
     Or(a=ALUNeg, b=ALUZero, out=ALULessThanOrEqualZero);
     And(a=ALULessThanOrEqualZero, b=JLE, out=JLEOut);
 
-
+//Checking to see if any of the jump conditions (Except Null) have been chosen and if their respective conditions have been met
     Or8Way(in[0]=false, in[1]=JGTOut, in[2]=JEQOut, in[3]=JGEOut, in[4]=JLTOut, in[5]=JNEOut, in[6]=JLEOut, in[7]=JMP, out=PCLoad);
+
+//If Jump selected but condition failed we still need to inc
+    Not(in=PCLoad, out=JJJSelectedButFailed);
+//Setting PC inc to true if either A type, NULL jump, or failed jump
+    Or(a=AtypeOrNULLInc, b=JJJSelectedButFailed, out=PCInc);
 
     
 

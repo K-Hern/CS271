@@ -101,11 +101,12 @@ void parse(FILE * file){
 	
     char line[MAX_LINE_LENGTH] = {0};
     unsigned int line_num = 0;
-    unsigned int label_line_num = 0;
     unsigned long instr_num = 0;
+    int instr_counter = 0;
 
 
     while (fgets(line, sizeof(line), file)){
+        line_num ++; 
 
         if (instr_num > MAX_INSTRUCTIONS){
             exit_program(EXIT_TOO_MANY_INSTRUCTIONS, MAX_INSTRUCTIONS + 1);
@@ -114,54 +115,44 @@ void parse(FILE * file){
         if (!(*line)){
             continue;
         }
-
+        //declaring the variable to silence warning
         char inst_type = '\0';
-        line_num ++;
-        //printf("Current Label_line_num: %u\n",label_line_num);
-        if (instr_num == 0)
-        {
-            line_num --;
-        }
 
         if (is_Atype(line)){
-            label_line_num ++; 
-            //line_num ++;
+            instr_counter++;
             instr_num ++;
+            if (instr_counter == 1){
+                instr_num --;
+            }
             inst_type = 'A';
             
            // printf("%c  %s\n", inst_type, line );
         }else if (is_label(line)){
-            label_line_num ++; 
-            //line_num ++;
             inst_type = 'L';
             char label[MAX_LABEL_LENGTH] = {0};
             extract_label(line, label);
-            //printf("-------LABEL-----------  %u: %s\n",label_line_num, label);
             if(!(isalpha(label[0]))){
-                exit_program(EXIT_INVALID_LABEL, (label_line_num + 2), label);
+                exit_program(EXIT_INVALID_LABEL, (line_num), label);
             }
             if(symtable_find(label) != NULL){
-                exit_program(EXIT_SYMBOL_ALREADY_EXISTS, (label_line_num + 2), label);
+                exit_program(EXIT_SYMBOL_ALREADY_EXISTS, (line_num), label);
             }
             symtable_insert(label, (instr_num));
-            line_num --;
             continue;
-            // printf("%c  %s\n", inst_type, label );
 
         }else //if (is_Ctype(line))
         {
-            label_line_num ++; 
-            //line_num ++;
+            instr_counter++;
             instr_num ++;
+            if (instr_counter == 1){
+                instr_num --;
+            }
+
             inst_type = 'C';
             
-           // printf("%c  %s\n", inst_type, line );
         }     
-        //instr_num ++;
-        printf("%u: %c  %s\n", line_num, inst_type, line);
+        printf("%lu: %c  %s\n", (instr_num), inst_type, line);
         
     }
-
-    
 
 }

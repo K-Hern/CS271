@@ -57,7 +57,6 @@ CHIP CPU {
     ARegister(in=InitialMuxOut, load=ARegLoad, out=ARegOut, out[15]=MVoidBitF, out[0..14]=addressM);
 
 
-
 //y of ALU is either inM if a bit is 1 or d if not
 	Mux16(a=ARegOut, b=inM, sel=instruction[12], out=SecondaryMuxOut);
     ALU(x=DRegOut, y=SecondaryMuxOut, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=ALUout, out=outM, zr=ALUZero, ng=ALUNeg);
@@ -72,11 +71,9 @@ CHIP CPU {
 //Storing address in addressM if we are writing to M, else submitting nothing 
  //   Mux16(a=false, b=addressMOut, sel=writeMBit, out[15]=MVoidBit, out[0..14]=addressM);
 
-
 //Cheking to see which jump condition has been selected, and filling that selection with the MSB (1 if C instruction, othwerise all return false)
     DMux8Way(in=instruction[15], sel=instruction[0..2], a=Null, b=JGT, c=JEQ, d=JGE, e=JLT, f=JNE, g=JLE, h=JMP);
 
-    
 //Checking to see if either an A instruction or NULL jump in which case increment by 1
     Or(a=AInstructLoad, b=Null, out=AtypeOrNULLInc);
 
@@ -112,7 +109,6 @@ CHIP CPU {
     Or(a=AtypeOrNULLInc, b=JJJSelectedButFailed, out=PCInc);
 
     
-
     PC(in=ARegOut, load=PCLoad, inc=PCInc, reset=reset, out[15]=void, out[0..14]=pc);
 
 

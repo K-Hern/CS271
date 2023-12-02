@@ -192,7 +192,7 @@ void parse(FILE * file){
             if(symtable_find(label) != NULL){
                 exit_program(EXIT_SYMBOL_ALREADY_EXISTS, (line_num), label);
             }
-            symtable_insert(label, (instr_num));
+            symtable_insert(label, (instr_num+1));
             continue;
 
         }else //if (is_Ctype(line))

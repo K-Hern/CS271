@@ -109,8 +109,8 @@ typedef enum {
     COMP_A = 48,
     COMP_NOT_D = 13,
     COMP_NOT_A = 49,
-    COMP_MINUS_D = 15,
-    COMP_MINUS_A = 51,
+    COMP_NEG_D = 15,
+    COMP_NEG_A = 51,
     COMP_D_PLUS_1 = 31,
     COMP_A_PLUS_1 = 55,
     COMP_D_MINUS_1 = 14,
@@ -121,16 +121,16 @@ typedef enum {
     COMP_D_AND_A = 0,
     COMP_D_OR_A = 21,
     //a = 1
-    COMP_M = 112,//a
-    COMP_NOT_M = 113,//!a
-    COMP_MINUS_M = 115,//_MINUS_a
-    COMP_M_PLUS_1 = 119,//A_PLUS_1
-    COMP_M_MINUS_1 = 114,//A_MINUS_1
-    COMP_D_PLUS_M = 66,//D_PLUS_A
-    COMP_D_MINUS_M = 83,//D_MINUS_A
-    COMP_M_MINUS_D = 71,//A_MINUS_D
-    COMP_D_AND_M = 64,//D_AND_A
-    COMP_D_OR_M = 85,//D_OR_A
+    COMP_M = 48,//a //112
+    COMP_NOT_M = 49,//!a
+    COMP_NEG_M = 51,//_NEG_A
+    COMP_M_PLUS_1 = 55,//A_PLUS_1
+    COMP_M_MINUS_1 = 50,//A_MINUS_1
+    COMP_D_PLUS_M = 2,//D_PLUS_A
+    COMP_D_MINUS_M = 19,//D_MINUS_A
+    COMP_M_MINUS_D = 7,//A_MINUS_D
+    COMP_D_AND_M = 0,//D_AND_A
+    COMP_D_OR_M = 21,//D_OR_A
 
 }comp_id;
 
@@ -189,9 +189,8 @@ static inline dest_id str_to_destid(const char *s){
 static inline comp_id str_to_compid(const char *s, int *a){
 
     comp_id id = COMP_INVALID;
-    
-    printf("this is s:'%s' and the print in compid and a:'%d'\n", s, a);
 
+//comparing comp inputs to corresponding values and converting it to decimal (from binary ALU input value)
     if (((strcmp(s, "0")) == 0)){
         id = COMP_0;
     } else if ((strcmp(s, "1")) == 0) {
@@ -207,9 +206,9 @@ static inline comp_id str_to_compid(const char *s, int *a){
     } else if ((strcmp(s, "!A")) == 0) {
         id = COMP_NOT_A;
     } else if ((strcmp(s, "-D")) == 0) {
-        id = COMP_MINUS_D;
+        id = COMP_NEG_D;
     } else if ((strcmp(s, "-A")) == 0) {
-        id = COMP_MINUS_A;
+        id = COMP_NEG_A;
     } else if ((strcmp(s, "D+1")) == 0) {
         id = COMP_D_PLUS_1;
     } else if ((strcmp(s, "A+1")) == 0) {
@@ -229,12 +228,11 @@ static inline comp_id str_to_compid(const char *s, int *a){
     } else if ((strcmp(s, "D|A")) == 0) {
         id = COMP_D_OR_A;
     } else if ((strcmp(s, "M")) == 0) {
-        printf("COrrect id idetented\n");
         id = COMP_M;
     } else if ((strcmp(s, "!M")) == 0) {
         id = COMP_NOT_M;
     } else if ((strcmp(s, "-M")) == 0) {
-        id = COMP_MINUS_M;
+        id = COMP_NEG_M;
     } else if ((strcmp(s, "M+1")) == 0) {
         id = COMP_M_PLUS_1;
     } else if ((strcmp(s, "M-1")) == 0) {
@@ -247,18 +245,19 @@ static inline comp_id str_to_compid(const char *s, int *a){
         id = COMP_M_MINUS_D;
     } else if ((strcmp(s, "D&M")) == 0) {
         id = COMP_D_AND_M;
-    } else{
+    } else if ((strcmp(s, "D|M")) == 0){
         id = COMP_D_OR_M;
     }
 
-    // if (id > 64){
-    //     *a = 1;
-    // } else {
-    //     *a = 0;
-    // }
-    printf("this is the end\n");
-    return id;
+//Checking to see if M is mentioned in comp, if so setting a bit to 1
+    if (((strcmp(s, "M")) == 0)){
+        a = 1;
+    } else {
+        a = 0;
+    }
 
+    return id;
 }
+   
 
 #endif

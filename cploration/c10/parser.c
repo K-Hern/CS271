@@ -17,7 +17,7 @@ void parse_C_instruction(char *line, c_instruction *instr){
     char *dest_token;
     char *jump_token;
     char *comp_token;
-    int *a = NULL;
+    //int *a = NULL;
 
     temp = strtok(line,line_breaker);
     jump_token = strtok(NULL, "");
@@ -32,7 +32,7 @@ void parse_C_instruction(char *line, c_instruction *instr){
 
 
     int jump_result = str_to_jumpid(jump_token);
-    int comp_result = str_to_compid(comp_token, a);
+    int comp_result = str_to_compid(comp_token, instr->a);
     int dest_result = str_to_destid(dest_token);
 
     //printf("These are the token to be passed into .h Jump: '%d'\n, comp: '%d'\n, dest: '%d'\n", jump_result, comp_result, dest_result);
@@ -271,7 +271,7 @@ int parse(FILE * file, instruction_cat *Instructions){
             }
 
             instr.type_of_inst = C_type_instruction;
-
+            //printf("Here is the a bit:'%d'\n", instr.itype.c_instruction.a);
             printf("C: d=%d, c=%d, j=%d\n", instr.itype.c_instruction.dest, instr.itype.c_instruction.comp, instr.itype.c_instruction.jump);
         }  
 

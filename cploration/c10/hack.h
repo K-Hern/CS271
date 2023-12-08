@@ -141,17 +141,17 @@ static inline jump_id str_to_jumpid(const char *s){
 
     if (s == NULL) {
         id = JMP_NULL;
-    } else if ((strstr(s, "JGT")) != NULL) {
+    } else if ((strcmp(s, "JGT")) == 0) {
         id = JMP_JGT;
-    } else if ((strstr(s, "JEQ")) != NULL) {
+    } else if ((strcmp(s, "JEQ")) == 0) {
         id = JMP_JEQ;
-    } else if ((strstr(s, "JGE")) != NULL) {
+    } else if ((strcmp(s, "JGE")) == 0) {
         id = JMP_JGE;
-    } else if ((strstr(s, "JLT")) != NULL) {
+    } else if ((strcmp(s, "JLT")) == 0) {
         id = JMP_JLT;
-    } else if ((strstr(s, "JNE")) != NULL) {
+    } else if ((strcmp(s, "JNE")) == 0) {
         id = JMP_JNE;
-    } else if ((strstr(s, "JLE")) != NULL) {
+    } else if ((strcmp(s, "JLE")) == 0) {
         id = JMP_JLE;
     } else{
         id = JMP_JMP;
@@ -166,17 +166,17 @@ static inline dest_id str_to_destid(const char *s){
 
     if (s == NULL) {
         id = DEST_NULL;
-    } else if ((strstr(s, "M=")) != NULL) {
+    } else if ((strcmp(s, "M")) == 0) {
         id = DEST_M;
-    } else if ((strstr(s, "D=")) != NULL) {
+    } else if ((strcmp(s, "D")) == 0) {
         id = DEST_D;
-    } else if ((strstr(s, "DM=")) != NULL) {
+    } else if ((strcmp(s, "DM")) == 0) {
         id = DEST_DM;
-    } else if ((strstr(s, "A=")) != NULL) {
+    } else if ((strcmp(s, "A")) == 0) {
         id = DEST_A;
-    } else if ((strstr(s, "AM=")) != NULL) {
+    } else if ((strcmp(s, "AM")) == 0) {
         id = DEST_AM;
-    } else if ((strstr(s, "AD=")) != NULL) {
+    } else if ((strcmp(s, "AD")) == 0) {
         id = DEST_AD;
     } else{
         id = DEST_ADM;
@@ -187,29 +187,76 @@ static inline dest_id str_to_destid(const char *s){
 }
 
 static inline comp_id str_to_compid(const char *s, int *a){
+
     comp_id id = COMP_INVALID;
+    
+    printf("this is s:'%s' and the print in compid and a:'%d'\n", s, a);
 
-    if (s == NULL) {
-        id = DEST_NULL;
-    } else if ((strstr(s, "M=")) != NULL) {
-        id = DEST_M;
-    } else if ((strstr(s, "D=")) != NULL) {
-        id = DEST_D;
-    } else if ((strstr(s, "DM=")) != NULL) {
-        id = DEST_DM;
-    } else if ((strstr(s, "A=")) != NULL) {
-        id = DEST_A;
-    } else if ((strstr(s, "AM=")) != NULL) {
-        id = DEST_AM;
-    } else if ((strstr(s, "AD=")) != NULL) {
-        id = DEST_AD;
+    if (((strcmp(s, "0")) == 0)){
+        id = COMP_0;
+    } else if ((strcmp(s, "1")) == 0) {
+        id = COMP_1;
+    } else if ((strcmp(s, "-1")) == 0) {
+        id = COMP_NEG1;
+    } else if ((strcmp(s, "D")) == 0) {
+        id = COMP_D;
+    } else if ((strcmp(s, "A")) == 0) {
+        id = COMP_A;
+    } else if ((strcmp(s, "!D")) == 0) {
+        id = COMP_NOT_D;
+    } else if ((strcmp(s, "!A")) == 0) {
+        id = COMP_NOT_A;
+    } else if ((strcmp(s, "-D")) == 0) {
+        id = COMP_MINUS_D;
+    } else if ((strcmp(s, "-A")) == 0) {
+        id = COMP_MINUS_A;
+    } else if ((strcmp(s, "D+1")) == 0) {
+        id = COMP_D_PLUS_1;
+    } else if ((strcmp(s, "A+1")) == 0) {
+        id = COMP_A_PLUS_1;
+    } else if ((strcmp(s, "D-1")) == 0) {
+        id = COMP_D_MINUS_1;
+    } else if ((strcmp(s, "A-1")) == 0) {
+        id = COMP_A_MINUS_1;
+    } else if ((strcmp(s, "D+A")) == 0) {
+        id = COMP_D_PLUS_A;
+    } else if ((strcmp(s, "D-A")) == 0) {
+        id = COMP_D_MINUS_A;
+    } else if ((strcmp(s, "A-D")) == 0) {
+        id = COMP_A_MINUS_D;
+    } else if ((strcmp(s, "D&A")) == 0) {
+        id = COMP_D_AND_A;
+    } else if ((strcmp(s, "D|A")) == 0) {
+        id = COMP_D_OR_A;
+    } else if ((strcmp(s, "M")) == 0) {
+        printf("COrrect id idetented\n");
+        id = COMP_M;
+    } else if ((strcmp(s, "!M")) == 0) {
+        id = COMP_NOT_M;
+    } else if ((strcmp(s, "-M")) == 0) {
+        id = COMP_MINUS_M;
+    } else if ((strcmp(s, "M+1")) == 0) {
+        id = COMP_M_PLUS_1;
+    } else if ((strcmp(s, "M-1")) == 0) {
+        id = COMP_M_MINUS_1;
+    } else if ((strcmp(s, "D+M")) == 0) {
+        id = COMP_D_PLUS_M;
+    } else if ((strcmp(s, "D-M")) == 0) {
+        id = COMP_D_MINUS_M;
+    } else if ((strcmp(s, "M-D")) == 0) {
+        id = COMP_M_MINUS_D;
+    } else if ((strcmp(s, "D&M")) == 0) {
+        id = COMP_D_AND_M;
     } else{
-        id = DEST_ADM;
+        id = COMP_D_OR_M;
     }
 
-    if (id > 63){
-        *a = 1;
-    }
+    // if (id > 64){
+    //     *a = 1;
+    // } else {
+    //     *a = 0;
+    // }
+    printf("this is the end\n");
     return id;
 
 }

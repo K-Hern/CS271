@@ -1,5 +1,5 @@
 /****************************************
- * C-ploration 9 for CS 271
+ * C-ploration 10 for CS 271
  * 
  * [NAME] $Kevin Hernandez$
  * [TERM] FALL $2023$
@@ -34,7 +34,6 @@ char *extract_label(const char *line, char* label);
 
 char *strip(char *s);
 
-void parse(FILE * file);
 
 bool is_Atype(const char *);
 bool is_label(const char *);
@@ -70,6 +69,7 @@ typedef struct instruction_cat {
         a_instruction a_instruction;
         c_instruction c_instruction;
     }itype;
+
     Instruction type_of_inst;
 
 }instruction_cat;
@@ -78,5 +78,8 @@ void add_predefined_symbols();
 
 bool parse_A_instruction(const char *line, a_instruction *instr);
 
+void parse_C_instruction(char *line, c_instruction *instr);
+
+int parse(FILE * file, instruction_cat *instructions);
 
 #endif

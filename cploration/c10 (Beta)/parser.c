@@ -32,7 +32,7 @@ void parse_C_instruction(char *line, c_instruction *instr){
 
 
     int jump_result = str_to_jumpid(jump_token);
-    int comp_result = str_to_compid(comp_token, instr->a);
+    short comp_result = str_to_compid(comp_token, instr->a);
     int dest_result = str_to_destid(dest_token);
 
     //printf("These are the token to be passed into .h Jump: '%d'\n, comp: '%d'\n, dest: '%d'\n", jump_result, comp_result, dest_result);
@@ -202,10 +202,9 @@ int parse(FILE * file, instruction_cat *Instructions){
         }
         //declaring the variable to silence warning
         //char inst_type;
-
+         //printf(" instr_num:'%d' ", instr_num);
         if (is_Atype(line)){
-            instr_counter++;
-
+            // instr_counter++;
             // Instructions[instr_num++] = instr;
             // if (instr_counter == 1){
             //     instr_num --;
@@ -220,12 +219,15 @@ int parse(FILE * file, instruction_cat *Instructions){
             //instr.itype = INST_A;
             instr.type_of_inst = A_type_instruction;
             
-            //printf("5) This is instr.itype.a_instruction.a_union.address:'%s'\n",  instr.itype.a_instruction.a_union.address);
+            //printf("5) This is instr.itype.a_instruction.a_union.address:'%d' and this is line:'%s'\n",  (int)instr.itype.a_instruction.a_union.address, line);
+            //printf("This is line + 1: '%s', and here is digit result '%d'\n", line+1, isdigit(line+1));
             if (isdigit(line[1])) {
                 //printf("6) This is isdigit :'%hd'\n",instr.itype.a_instruction.a_union.address);
+                //printf("Printing digit\n");
                 printf("A: %d\n", instr.itype.a_instruction.a_union.address);
             } else {
                 //printf("7) this is printing line: %s\n", line);
+                //printf("Printing line\n");
                 printf("A: %s\n", line + 1);
             }
 
@@ -253,12 +255,13 @@ int parse(FILE * file, instruction_cat *Instructions){
             char tmp_line[MAX_LINE_LENGTH];
             strcpy(tmp_line, line);
 
-
-            instr_counter++;
+            //12/08/23
+            // instr_counter++;
             // Instructions[instr_num ++] = instr;
             // if (instr_counter == 1){
             //     instr_num --;
-            // }
+            // }   
+
 
             //inst_type = 'C';
             //printf("This is the C line: '%s'\n", tmp_line);
@@ -281,7 +284,8 @@ int parse(FILE * file, instruction_cat *Instructions){
 
 
         //printf("%lu: %c  %s\n", (instr_num), inst_type, line);
-       Instructions[instr_num++] = instr; 
+        
+        Instructions[instr_num ++] = instr;
     }
 
     //printf("I made it to the end!\n");

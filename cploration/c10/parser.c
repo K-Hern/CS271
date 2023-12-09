@@ -220,7 +220,7 @@ int parse(FILE * file, instruction_cat *Instructions){
             instr.type_of_inst = A_type_instruction;
             
             //printf("5) This is instr.itype.a_instruction.a_union.address:'%s'\n",  instr.itype.a_instruction.a_union.address);
-            if (isdigit(instr.itype.a_instruction.a_union.address) != 0) {
+            if (isdigit(line[1])) {
                 //printf("6) This is isdigit :'%hd'\n",instr.itype.a_instruction.a_union.address);
                 printf("A: %d\n", instr.itype.a_instruction.a_union.address);
             } else {

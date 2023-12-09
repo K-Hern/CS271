@@ -42,11 +42,7 @@ int main(int argc, const char *argv[])
 
     num_instructions = parse(fin, Instructions);
     //symtable_print_labels();
-
-    printf("num_instructions: '%d'\n", num_instructions);
  
-
-
 
 
     fclose(fin);

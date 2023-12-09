@@ -263,11 +263,11 @@ int parse(FILE * file, instruction_cat *Instructions){
             parse_C_instruction(tmp_line, &instr.itype.c_instruction);
 
             if (instr.itype.c_instruction.dest == DEST_INVALID){
-                exit_program(EXIT_INVALID_A_INSTR, line_num, line);
+                exit_program(EXIT_INVALID_C_DEST, line_num, line);
             } else if (instr.itype.c_instruction.comp == COMP_INVALID) {
-                exit_program(EXIT_INVALID_A_INSTR, line_num, line);
+                exit_program(EXIT_INVALID_C_COMP, line_num, line);
             } else if (instr.itype.c_instruction.jump == JMP_INVALID) {
-                exit_program(EXIT_INVALID_A_INSTR, line_num, line);
+                exit_program(EXIT_INVALID_C_JUMP, line_num, line);
             }
 
             instr.type_of_inst = C_type_instruction;

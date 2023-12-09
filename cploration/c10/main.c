@@ -12,11 +12,12 @@
 
 #define MAX_INSTRUCTION_COUNT 30000
 
+//c10 final
 
 int main(int argc, const char *argv[])
 {	
     int num_instructions;
-    Instruction *Instructions = malloc(MAX_INSTRUCTION_COUNT * sizeof(Instruction));
+    struct instruction_cat *Instructions = malloc(MAX_INSTRUCTION_COUNT * sizeof(struct instruction_cat));
 
 
     // if (argc !=2){

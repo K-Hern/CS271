@@ -26,6 +26,23 @@ opcode instruction_to_opcode(c_instruction instr){
     return op;
 }
 
+void assemble(const char * file_name, Instruction* instructions, int num_instructions){
+    //Creating empty varibale to print later
+    opcode Instruction_opcode;
+    //int to track R[] of new variables
+    int Reg_num = 16;
+    //6 because 5 of ".hack" and '\0'
+    int file_name_size = (strlen(file_name) + 6);
+    char hack_file[file_name_size];
+    strcpy(hack_file,file_name);
+    strcat(hack_file, ".hack");
+
+    FILE *fout = fopen(hack_file, "w" );
+    int i = 0;
+
+
+    fclose(fout);
+}
 
 void parse_C_instruction(char *line, c_instruction *instr){
     char line_breaker[] = ";";
@@ -197,12 +214,9 @@ int parse(FILE * file, instruction_cat *Instructions){
     char line[MAX_LINE_LENGTH] = {0};
     unsigned int line_num = 0;
     unsigned long instr_num = 0;
-    int instr_counter = 0;
+
  
     instruction_cat instr;
-
-    
-    
 
     add_predefined_symbols();
     //symtable_display_table();
@@ -217,44 +231,28 @@ int parse(FILE * file, instruction_cat *Instructions){
         if (!(*line)){
             continue;
         }
-        //declaring the variable to silence warning
-        //char inst_type;
-         //printf(" instr_num:'%d' ", instr_num);
+
         if (is_Atype(line)){
-            // instr_counter++;
-            // Instructions[instr_num++] = instr;
-            // if (instr_counter == 1){
-            //     instr_num --;
-            // }
+
             //inst_type = 'A';
 
-            //if (!parse_A_instruction(line, &instr.instr.a)){
-            //printf("4) This is a_union.label:'%s'\n",  &instr.itype.a_instruction);
             if (!parse_A_instruction(line, &instr.itype.a_instruction)){
                 exit_program(EXIT_INVALID_A_INSTR, line_num, line);
             }
-            //instr.itype = INST_A;
+
             instr.type_of_inst = A_type_instruction;
             
-            //printf("5) This is instr.itype.a_instruction.a_union.address:'%d' and this is line:'%s'\n",  (int)instr.itype.a_instruction.a_union.address, line);
-            //printf("This is line + 1: '%s', and here is digit result '%d'\n", line+1, isdigit(line+1));
+
             if (isdigit(line[1])) {
-                //printf("6) This is isdigit :'%hd'\n",instr.itype.a_instruction.a_union.address);
-                //printf("Printing digit\n");
                 //printf("A: %d\n", instr.itype.a_instruction.a_union.address);
             } else {
-                //printf("7) this is printing line: %s\n", line);
-                //printf("Printing line\n");
                 //printf("A: %s\n", line + 1);
             }
-
-            //printf("This is the end of the isdigit\n");
-
+    
             
-            
-           // printf("%c  %s\n", inst_type, line );
+
         }else if (is_label(line)){
-            //inst_type = 'L';
+
             char label[MAX_LABEL_LENGTH] = {0};
             extract_label(line, label);
             if(!(isalpha(label[0]))){
@@ -271,17 +269,7 @@ int parse(FILE * file, instruction_cat *Instructions){
 
             char tmp_line[MAX_LINE_LENGTH];
             strcpy(tmp_line, line);
-
-            //12/08/23
-            // instr_counter++;
-            // Instructions[instr_num ++] = instr;
-            // if (instr_counter == 1){
-            //     instr_num --;
-            // }   
-
-
-            //inst_type = 'C';
-            //printf("This is the C line: '%s'\n", tmp_line);
+  
             parse_C_instruction(tmp_line, &instr.itype.c_instruction);
 
             if (instr.itype.c_instruction.dest == DEST_INVALID){
@@ -293,18 +281,11 @@ int parse(FILE * file, instruction_cat *Instructions){
             }
 
             instr.type_of_inst = C_type_instruction;
-            //printf("Here is the a bit:'%d'\n", instr.itype.c_instruction.a);
-            //printf("C: d=%d, c=%d, j=%d\n", instr.itype.c_instruction.dest, instr.itype.c_instruction.comp, instr.itype.c_instruction.jump);
+
         }  
 
-        //printf("This is the end of the whole parse while loop\n");
-
-
-        //printf("%lu: %c  %s\n", (instr_num), inst_type, line);
-        
         Instructions[instr_num ++] = instr;
     }
 
-    //printf("I made it to the end!\n");
     return instr_num;
 }

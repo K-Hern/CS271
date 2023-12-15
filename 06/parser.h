@@ -45,7 +45,7 @@ typedef enum Instruction {
 }Instruction;
 
 typedef struct c_instruction {
-   opcode a:1;
+   opcode a:2;
    opcode comp:7;
    opcode dest:4;
    opcode jump:4;

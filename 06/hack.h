@@ -275,9 +275,22 @@ static inline comp_id str_to_compid(const char *s, int *a){
     } else {
         a = 0;
     }
-    printf("This is a: '%d'\n", a);
+
     return id;
 }
+
+static inline int a_bit_set(const char *s, int *a){
+
+//Checking to see if M is mentioned in comp, if so setting a bit to 1
+    if (((strstr(s, "M")) != NULL)){
+        a = 1;
+    } else {
+        a = 0;
+    }
+
+    return a;
+}
+
    
 
 #endif

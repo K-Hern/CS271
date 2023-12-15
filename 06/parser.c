@@ -16,6 +16,7 @@ opcode instruction_to_opcode(c_instruction instr){
     op |= (7 << 13);
     //a bit
     op |= (instr.a << 12);
+    printf("This is the instr.a: '%d'\n", instr.a);
     //comp bits
     op |= (instr.comp << 6);
     //dest bits
@@ -41,10 +42,9 @@ void assemble(const char * file_name, instruction_cat* instructions, int num_ins
     int i = 0;
 
     while (i < num_instructions){
-        char file_output[17];
-    
 
         if(instructions[i].type_of_inst == A_type_instruction){
+            //printf("This is an A instruction\n");
             //checking to see if a label
             if (instructions[i].itype.a_instruction.is_addr == false){ //means label
                 //Looking to see if already exists
@@ -64,11 +64,13 @@ void assemble(const char * file_name, instruction_cat* instructions, int num_ins
             }
             
         }else if(instructions[i].type_of_inst == C_type_instruction){
+            //printf("This is a '%d' C instruction\n", i);
+            //printf("Here is the a bit: '%d'\n", instructions[1].itype.c_instruction.a);
 
             Instruction_opcode = instruction_to_opcode(instructions[i].itype.c_instruction);
         }
         
-        printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n", OPCODE_TO_BINARY(Instruction_opcode));
+        //printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n", OPCODE_TO_BINARY(Instruction_opcode));
         fprintf(fout, "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n", OPCODE_TO_BINARY(Instruction_opcode));
 
         i ++;
@@ -85,7 +87,7 @@ void parse_C_instruction(char *line, c_instruction *instr){
     char *dest_token;
     char *jump_token;
     char *comp_token;
-    //int *a = NULL;
+    int *a = NULL;
 
     temp = strtok(line,line_breaker);
     jump_token = strtok(NULL, "");
@@ -100,7 +102,9 @@ void parse_C_instruction(char *line, c_instruction *instr){
 
 
     int jump_result = str_to_jumpid(jump_token);
-    short comp_result = str_to_compid(comp_token, instr->a);
+    printf("This is the comp_token: '%s'\n", comp_token);
+    short comp_result = str_to_compid(comp_token, a);
+    int a_bit = a_bit_set(comp_token, a);
     int dest_result = str_to_destid(dest_token);
 
     //printf("These are the token to be passed into .h Jump: '%d'\n, comp: '%d'\n, dest: '%d'\n", jump_result, comp_result, dest_result);
@@ -108,6 +112,7 @@ void parse_C_instruction(char *line, c_instruction *instr){
     instr->jump = jump_result;
     instr->comp = comp_result;
     instr->dest = dest_result;
+    instr->a = a_bit;
 
       //printf("These are the values that have been passed into .h Jump: '%hd'\n, comp: '%hd'\n, dest: '%hd'\n", instr->jump, instr->comp, instr->dest);
 
@@ -303,6 +308,7 @@ int parse(FILE * file, instruction_cat *Instructions){
 
             char tmp_line[MAX_LINE_LENGTH];
             strcpy(tmp_line, line);
+
   
             parse_C_instruction(tmp_line, &instr.itype.c_instruction);
 

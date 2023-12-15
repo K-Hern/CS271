@@ -27,7 +27,7 @@ opcode instruction_to_opcode(c_instruction instr){
 }
 
 void assemble(const char * file_name, instruction_cat* instructions, int num_instructions){
-    //Creating empty varibale to print later
+    //Creating empty variable to print later
     opcode Instruction_opcode;
     //int to track R[] of new variables
     int Reg_num = 16;
@@ -71,7 +71,6 @@ void assemble(const char * file_name, instruction_cat* instructions, int num_ins
             Instruction_opcode = instruction_to_opcode(instructions[i].itype.c_instruction);
         }
         
-        //printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n", OPCODE_TO_BINARY(Instruction_opcode));
         fprintf(fout, "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n", OPCODE_TO_BINARY(Instruction_opcode));
 
         i ++;
@@ -107,14 +106,11 @@ void parse_C_instruction(char *line, c_instruction *instr){
     int a_bit = a_bit_set(comp_token, a);
     int dest_result = str_to_destid(dest_token);
 
-    //printf("These are the token to be passed into .h Jump: '%d'\n, comp: '%d'\n, dest: '%d'\n", jump_result, comp_result, dest_result);
-
     instr->jump = jump_result;
     instr->comp = comp_result;
     instr->dest = dest_result;
     instr->a = a_bit;
 
-      //printf("These are the values that have been passed into .h Jump: '%hd'\n, comp: '%hd'\n, dest: '%hd'\n", instr->jump, instr->comp, instr->dest);
 
 }
 
@@ -134,11 +130,8 @@ bool parse_A_instruction(const char *line, a_instruction *instr){
 
     char *s = (char*)malloc(strlen(line));
     char *s_end = (char*)malloc(strlen(line));
-    //s_end = '\0';
 
-   //printf("1) This is s:'%s', this is line: '%s'\n", s, line+1);
-    strcpy(s,(line+1));
-    //printf("2) This is s:'%s', this is line: '%s'\n", s, line+1);
+    strcpy(s,(line+1));;
 
     long result = strtol(s, &s_end, 10);
 
@@ -146,7 +139,6 @@ bool parse_A_instruction(const char *line, a_instruction *instr){
         //Means we have a string
         instr->a_union.label = (char *) malloc(strlen(line));
         strcpy(instr->a_union.label,s);
-        //printf("3) This is a_union.label:'%s'\n",  instr->a_union.label);
         instr->is_addr = false;
 
     }else if(*s_end != 0){
@@ -221,7 +213,6 @@ char *extract_label(const char *line, char* label)
  */
 char *strip(char *s){	
 
-	// your code here
     char s_new[strlen(s)+ 1];
     int i = 0;
 
@@ -258,7 +249,6 @@ int parse(FILE * file, instruction_cat *Instructions){
     instruction_cat instr;
 
     add_predefined_symbols();
-    //symtable_display_table();
 
     while (fgets(line, sizeof(line), file)){
         line_num ++; 
@@ -273,7 +263,6 @@ int parse(FILE * file, instruction_cat *Instructions){
 
         if (is_Atype(line)){
 
-            //inst_type = 'A';
 
             if (!parse_A_instruction(line, &instr.itype.a_instruction)){
                 exit_program(EXIT_INVALID_A_INSTR, line_num, line);

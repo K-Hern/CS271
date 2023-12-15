@@ -65,8 +65,6 @@ void assemble(const char * file_name, instruction_cat* instructions, int num_ins
             }
             
         }else if(instructions[i].type_of_inst == C_type_instruction){
-            //printf("This is a '%d' C instruction\n", i);
-            //printf("Here is the a bit: '%d'\n", instructions[1].itype.c_instruction.a);
 
             Instruction_opcode = instruction_to_opcode(instructions[i].itype.c_instruction);
         }

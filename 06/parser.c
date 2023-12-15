@@ -26,7 +26,7 @@ opcode instruction_to_opcode(c_instruction instr){
     return op;
 }
 
-void assemble(const char * file_name, Instruction* instructions, int num_instructions){
+void assemble(const char * file_name, instruction_cat* instructions, int num_instructions){
     //Creating empty varibale to print later
     opcode Instruction_opcode;
     //int to track R[] of new variables
@@ -39,6 +39,40 @@ void assemble(const char * file_name, Instruction* instructions, int num_instruc
 
     FILE *fout = fopen(hack_file, "w" );
     int i = 0;
+
+    while (i < num_instructions){
+        char file_output[17];
+    
+
+        if(instructions[i].type_of_inst == A_type_instruction){
+            //checking to see if a label
+            if (instructions[i].itype.a_instruction.is_addr == false){ //means label
+                //Looking to see if already exists
+                if (symtable_find(instructions[i].itype.a_instruction.a_union.label) != NULL){
+                    //if label already exists setting the opcode as the address
+                   Instruction_opcode = instructions[i].itype.a_instruction.a_union.address;
+                }else{
+                    //means the label does not already exist
+                    symtable_insert(instructions[i].itype.a_instruction.a_union.label, Reg_num);
+                    Reg_num ++; 
+                }
+                free(instructions[i].itype.a_instruction.a_union.label);
+
+            }else{
+                //means a-type is address
+                Instruction_opcode = instructions[i].itype.a_instruction.a_union.address;
+            }
+            
+        }else if(instructions[i].type_of_inst == C_type_instruction){
+
+            Instruction_opcode = instruction_to_opcode(instructions[i].itype.c_instruction);
+        }
+        
+        printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n", OPCODE_TO_BINARY(Instruction_opcode));
+        fprintf(fout, "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n", OPCODE_TO_BINARY(Instruction_opcode));
+
+        i ++;
+    }
 
 
     fclose(fout);

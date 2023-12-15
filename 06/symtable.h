@@ -1,8 +1,6 @@
 #ifndef __SYMTABLE_H__
 #define __SYMTABLE_H__
 
-// All code in file
-
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>

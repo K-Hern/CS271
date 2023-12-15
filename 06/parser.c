@@ -16,7 +16,6 @@ opcode instruction_to_opcode(c_instruction instr){
     op |= (7 << 13);
     //a bit
     op |= (instr.a << 12);
-    printf("This is the instr.a: '%d'\n", instr.a);
     //comp bits
     op |= (instr.comp << 6);
     //dest bits
@@ -50,10 +49,12 @@ void assemble(const char * file_name, instruction_cat* instructions, int num_ins
                 //Looking to see if already exists
                 if (symtable_find(instructions[i].itype.a_instruction.a_union.label) != NULL){
                     //if label already exists setting the opcode as the address
-                   Instruction_opcode = instructions[i].itype.a_instruction.a_union.address;
+                   Symbol *labeladdr = symtable_find(instructions[i].itype.a_instruction.a_union.label);
+                   Instruction_opcode = (labeladdr->addr); 
                 }else{
                     //means the label does not already exist
                     symtable_insert(instructions[i].itype.a_instruction.a_union.label, Reg_num);
+                    Instruction_opcode = Reg_num;
                     Reg_num ++; 
                 }
                 free(instructions[i].itype.a_instruction.a_union.label);
@@ -102,7 +103,6 @@ void parse_C_instruction(char *line, c_instruction *instr){
 
 
     int jump_result = str_to_jumpid(jump_token);
-    printf("This is the comp_token: '%s'\n", comp_token);
     short comp_result = str_to_compid(comp_token, a);
     int a_bit = a_bit_set(comp_token, a);
     int dest_result = str_to_destid(dest_token);
@@ -301,7 +301,7 @@ int parse(FILE * file, instruction_cat *Instructions){
                 exit_program(EXIT_SYMBOL_ALREADY_EXISTS, (line_num), label);
             }
 
-            symtable_insert(label, (instr_num+1));
+            symtable_insert(label, (instr_num));
             continue;
 
         }else{ //if (is_Ctype(line))

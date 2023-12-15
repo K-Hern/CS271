@@ -206,6 +206,8 @@ static inline dest_id str_to_destid(const char *s){
 
 static inline comp_id str_to_compid(const char *s, int *a){
 
+    
+
     comp_id id = COMP_INVALID;
 
 //comparing comp inputs to corresponding values and converting it to decimal (from binary ALU input value)
@@ -268,12 +270,12 @@ static inline comp_id str_to_compid(const char *s, int *a){
     }
 
 //Checking to see if M is mentioned in comp, if so setting a bit to 1
-    if (((strcmp(s, "M")) == 0)){
+    if (((strstr(s, "M")) != NULL)){
         a = 1;
     } else {
         a = 0;
     }
-
+    printf("This is a: '%d'\n", a);
     return id;
 }
    

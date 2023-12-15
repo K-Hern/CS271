@@ -1,5 +1,5 @@
 /****************************************
- * C-ploration 10 for CS 271
+ * Project 6 for CS 271
  * 
  * [NAME] $Kevin Hernandez$
  * [TERM] FALL $2023$
@@ -24,8 +24,6 @@
 #define MAX_HACK_ADDRESS INT16_MAX
 #define MAX_INSTRUCTIONS (MAX_HACK_ADDRESS)
 
-
-/** function prototypes **/
 
 typedef int16_t hack_addr;
 typedef int16_t opcode;
@@ -81,5 +79,9 @@ bool parse_A_instruction(const char *line, a_instruction *instr);
 void parse_C_instruction(char *line, c_instruction *instr);
 
 int parse(FILE * file, instruction_cat *instructions);
+
+void assemble(const char * file_name, intruction* instructions, int num_instructions);
+
+opcode instruction_to_opcode(c_instruction instr);
 
 #endif

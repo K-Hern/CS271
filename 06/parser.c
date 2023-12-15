@@ -1,5 +1,5 @@
 /****************************************
- * C-ploration 10 for CS 271
+ * Project 6 for CS 271
  * 
  * [NAME] $Kevin Hernandez$
  * [TERM] FALL $2023$
@@ -9,6 +9,23 @@
 #include "symtable.h"
 #include "error.h"
 #include "hack.h"
+
+opcode instruction_to_opcode(c_instruction instr){
+    opcode op = 0;
+    ///I bit
+    op |= (7 << 13);
+    //a bit
+    op |= (instr.a << 12);
+    //comp bits
+    op |= (instr.comp << 6);
+    //dest bits
+    op |= (instr.dest << 3);
+    //jump bits
+    op |= (instr.jump << 0);
+
+    return op;
+}
+
 
 void parse_C_instruction(char *line, c_instruction *instr){
     char line_breaker[] = ";";
@@ -224,11 +241,11 @@ int parse(FILE * file, instruction_cat *Instructions){
             if (isdigit(line[1])) {
                 //printf("6) This is isdigit :'%hd'\n",instr.itype.a_instruction.a_union.address);
                 //printf("Printing digit\n");
-                printf("A: %d\n", instr.itype.a_instruction.a_union.address);
+                //printf("A: %d\n", instr.itype.a_instruction.a_union.address);
             } else {
                 //printf("7) this is printing line: %s\n", line);
                 //printf("Printing line\n");
-                printf("A: %s\n", line + 1);
+                //printf("A: %s\n", line + 1);
             }
 
             //printf("This is the end of the isdigit\n");
@@ -277,7 +294,7 @@ int parse(FILE * file, instruction_cat *Instructions){
 
             instr.type_of_inst = C_type_instruction;
             //printf("Here is the a bit:'%d'\n", instr.itype.c_instruction.a);
-            printf("C: d=%d, c=%d, j=%d\n", instr.itype.c_instruction.dest, instr.itype.c_instruction.comp, instr.itype.c_instruction.jump);
+            //printf("C: d=%d, c=%d, j=%d\n", instr.itype.c_instruction.dest, instr.itype.c_instruction.comp, instr.itype.c_instruction.jump);
         }  
 
         //printf("This is the end of the whole parse while loop\n");
